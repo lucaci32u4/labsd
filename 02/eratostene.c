@@ -6,6 +6,8 @@ typedef int T;
 
 #include "SortedList.h"
 
+#define get getNth
+
 SortedList *getNaturals(int A, int B) {
 	SortedList *nats;
 	int i;
@@ -17,29 +19,27 @@ SortedList *getNaturals(int A, int B) {
 }
 
 SortedList *getPrimes(int N) {
-	SortedList * nats = getNaturals(1, N);
-	SortedList * upcounter = getNaturals(1, N);
-	SortedList * dels = NULL;
-	while (!isEmpty(upcounter)) {
-		int i = getNth(upcounter, 1);
-		int current = getNth(nats, i);
-		bool prime = true;
-		deleteOnce(&upcounter, i);
-		SortedList * divs = getNaturals(2, current / 2);
-		while (!isEmpty(divs)) {
-			int div = getNth(divs, 1);
-			deleteOnce(&divs, div);
-			if (current % div == 0) {
-				prime = false;
+	SortedList * nats = getNaturals(2, N);
+	SortedList * running = NULL;
+	insert(&running, 1);
+	int p = 1;
+	while (!isEmpty(running)) {
+		SortedList * ilist = getNaturals(1, (int)length(nats));
+		while (!isEmpty(ilist)) {
+			int i = get(ilist, 1); deleteOnce(&ilist, i);
+			if (p < get(nats, i)) {
+				p = get(nats, i);
+				if (i == (int)length(nats)) {
+					deleteOnce(&running, 1);
+				}
+				break;
 			}
 		}
-		if (!prime) {
-			insert(&dels, current);
+		SortedList * mul = getNaturals(2, N / p);
+		while (!isEmpty(mul)) {
+			int m = p * get(mul, 1); deleteOnce(&mul, get(mul, 1));
+			if (contains(nats, m)) deleteOnce(&nats, m);
 		}
-	}
-	while (!isEmpty(dels)) {
-		deleteOnce(&nats, getNth(dels, 1));
-		deleteOnce(&dels, getNth(dels, 1));
 	}
 	return nats;
 }
