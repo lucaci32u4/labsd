@@ -45,8 +45,12 @@ long lengthStackRecursive(List *list) {
 	return (list ? lengthStackRecursive(list->next) + 1l : 0l);
 }
 
+long __lengthTailRecursive(List * list, long acc) {
+	return (list ? __lengthTailRecursive(list->next, acc + 1) : acc);
+}
+
 long lengthTailRecursive(List *list) {
-	return (list ? 1l + lengthTailRecursive(list->next) : 0l);
+	return __lengthTailRecursive(list, 0);
 }
 
 void evalLengthFunction(long SIZE, char name[], long(*length)(List *)) {
