@@ -6,44 +6,44 @@
 
 
 
-typedef struct StackNode{
+typedef struct StackNode {
 	Item elem;
-	struct StackNode *next;
-}StackNode;
+	struct StackNode * next;
+} StackNode;
 
-typedef StackNode TCelSt; // Redenumirea unui nod la notatiile din curs 
-typedef StackNode *ACelSt; // Redenumirea unui pointer la nod la notatiile din curs
+//typedef StackNode TCelSt;
+//typedef StackNode *ACelSt;
 
-typedef struct Stack{
-	StackNode* head;  // Varful stivei
-	long size; // Numarul de elemente din stiva
-}Stack;
+typedef struct Stack {
+	StackNode * head;
+	long size;
+} Stack;
 
-typedef Stack TStiva; // Redenumirea stivei la notatiile din curs
-typedef Stack *ASt;//  // Redenumirea unui pointer la stiva la notatiile din curs
+//typedef Stack TStiva;
+//typedef Stack *ASt;
 
-Stack* createStack(void){
+Stack * createStack() {
 	// TODO: Cerinta 1
 	return NULL;
 }
 
-int isStackEmpty(Stack* stack){
+int isStackEmpty(Stack * stack) {
 	// TODO: Cerinta 1
 }
 
-void push(Stack *stack, Item elem){
+void push(Stack * stack, Item elem) {
 	// TODO: Cerinta 1
 }
 
-Item top(Stack *stack){	
-	// TODO: Cerinta 1
-} 
-
-void pop(Stack *stack){
+Item top(Stack * stack) {
 	// TODO: Cerinta 1
 }
 
-void destroyStack(Stack *stack){
+void pop(Stack * stack) {
+	// TODO: Cerinta 1
+}
+
+void destroyStack(Stack * stack) {
 	// TODO: Cerinta 1
 }
 
