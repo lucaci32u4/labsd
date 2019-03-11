@@ -179,7 +179,7 @@ int testDequeue(void** queue, float score){
 }
 // -----------------------------------------------------------------------------
 
-int testDestroy(void** queue, float score){
+int testDestroy(void** queue, float score) {
 
  	ASSERT((*queue) != NULL, "Destroy-01");
  	destroyQueue(*queue);

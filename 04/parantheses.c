@@ -8,14 +8,21 @@ typedef char Item;
 #include "Stack.h"
 
 int isBalanced(const char *str, int length){
-
-  /* TODO: Cerinta 3
-   * Implementation must use a stack.
-   * Do NOT forget to deallocate the memory you use.
-   */
-    int ret = 0;
-    return ret;
-      
+    Stack * stack = createStack();
+    for (int i = 0; i < length; ++i) {
+        if (str[i] == '(') push(stack, 0);
+        else pop(stack);
+    }
+    int ok = isStackEmpty(stack);
+    destroyStack(stack);
+    stack = createStack();
+    for (int i = length - 1; i >= 0; --i) {
+        if (str[i] == ')') push(stack, 0);
+        else pop(stack);
+    }
+    ok &= isStackEmpty(stack);
+    destroyStack(stack);
+    return ok;
 }
 
 int main(){

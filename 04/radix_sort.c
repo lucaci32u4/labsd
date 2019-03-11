@@ -25,6 +25,10 @@ int arrayMaximum(const int* arr, int len){
 	return max;
 }
 
+int getNthDigit(int num, int n) {
+	return (n ? getNthDigit(num / 10, n - 1) : num % 10);
+}
+
 int getNumberOfDigits(int num){
 	int digits = 0;
 	while(num){
@@ -50,11 +54,31 @@ void radixSort(int *arr, int len){
 	// 3b. Re-construct the array by using each bucket in order
 
 	//4. Destroy queues
+	Queue * q[10] = { 0 };
+	for (int i = 0; i < 10; ++i) {
+		q[i] = createQueue();
+	}
+	int digits = getNumberOfDigits(arrayMaximum(arr, len));
+	for (int dig = 0; dig < digits; ++dig) {
+		for (int i = 0; i < len; ++i) {
+			enqueue(q[getNthDigit(arr[i], dig)], arr[i]);
+		}
+		len = 0;
+		for (int i = 0; i < 10; ++i) {
+			while (!isQueueEmpty(q[i])) {
+				arr[len++] = front(q[i]);
+				dequeue(q[i]);
+			}
+		}
+	}
+	for (int i = 0; i < 10; ++i) {
+		destroyQueue(q[i]);
+	}
 }
 
 int main(void){
 	
-
+	int k = getNthDigit(32, 0);
     int len;
     char fileBuffer[MAX_INPUT_LEN];
     FILE* inputFile = fopen("input-radix-sort.csv","r");

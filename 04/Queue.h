@@ -4,49 +4,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct QueueNode{
+typedef struct QueueNode {
 	Item elem;
-	struct QueueNode *next;
-}QueueNode;
+	struct QueueNode * next;
+} QueueNode;
 
-typedef QueueNode TcelQ;
-typedef QueueNode *ACelQ;
-
-typedef struct Queue{
-	QueueNode *front;
-	QueueNode *rear;
+typedef struct Queue {
+	QueueNode * front;
+	QueueNode * rear;
 	long size;
-}Queue;
+} Queue;
 
-typedef Queue TCoada;
-typedef Queue *AQ;
-
-
-Queue* createQueue(void){
-	// TODO: Cerinta 2
-	return NULL;
-} 
-
-int isQueueEmpty(Queue *q){
-	// TODO: Cerinta 2
-	return 0;
+Queue * createQueue(void) {
+	return (Queue *)calloc(1, sizeof(Queue));
 }
 
-void enqueue(Queue *q, Item elem){
-	// TODO: Cerinta 2
+int isQueueEmpty(Queue * q) {
+	return (q->front == 0 || q->rear == 0);
 }
 
-Item front(Queue* q){
-	// TODO: Cerinta 2
+void enqueue(Queue * q, Item elem) {
+	QueueNode * queueNode = (QueueNode *)calloc(1, sizeof(QueueNode));
+	queueNode->next = NULL;
+	queueNode->elem = elem;
+	if (!q->rear) {
+		q->rear = queueNode;
+		q->front = queueNode;
+	} else {
+		q->rear->next = queueNode;
+		q->rear = queueNode;
+	}
+	q->size++;
 }
 
-void dequeue(Queue* q){
-	// TODO: Cerinta 2
-
+Item front(Queue * q) {
+	return q->front->elem;
 }
 
-void destroyQueue(Queue *q){
-	// TODO: Cerinta 2
+void dequeue(Queue * q) {
+	if (q->rear == q->front) {
+		free(q->front);
+		q->rear = NULL;
+		q->front = NULL;
+	} else {
+		QueueNode * orphan = q->front;
+		q->front = q->front->next;
+		free(orphan);
+	}
+	q->size--;
+}
+
+void destroyQueue(Queue * q) {
+	while (!isQueueEmpty(q)) {
+		dequeue(q);
+	}
+	free(q);
 }
 
 #endif

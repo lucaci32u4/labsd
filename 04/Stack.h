@@ -11,40 +11,45 @@ typedef struct StackNode {
 	struct StackNode * next;
 } StackNode;
 
-//typedef StackNode TCelSt;
-//typedef StackNode *ACelSt;
-
 typedef struct Stack {
 	StackNode * head;
 	long size;
 } Stack;
 
-//typedef Stack TStiva;
-//typedef Stack *ASt;
-
 Stack * createStack() {
-	// TODO: Cerinta 1
-	return NULL;
+	return (Stack *)calloc(1, sizeof(Stack));
 }
 
 int isStackEmpty(Stack * stack) {
-	// TODO: Cerinta 1
+	return stack->head == NULL;
 }
 
 void push(Stack * stack, Item elem) {
-	// TODO: Cerinta 1
+	StackNode * stackNode = (StackNode *)calloc(1, sizeof(StackNode));
+	stackNode->next = stack->head;
+	stackNode->elem = elem;
+	stack->head = stackNode;
+	stack->size++;
 }
 
 Item top(Stack * stack) {
-	// TODO: Cerinta 1
+	return stack->head->elem;
 }
 
 void pop(Stack * stack) {
-	// TODO: Cerinta 1
+	if (stack->head) {
+		StackNode *orphan = stack->head;
+		stack->head = orphan->next;
+		stack->size--;
+		free(orphan);
+	}
 }
 
 void destroyStack(Stack * stack) {
-	// TODO: Cerinta 1
+	while (stack->head) {
+		pop(stack);
+	}
+	free(stack);
 }
 
 #endif 
