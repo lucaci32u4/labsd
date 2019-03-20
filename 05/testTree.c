@@ -54,5 +54,8 @@ int main()
     printf("After swap (mirror). Inorder should be: 5 3 2 1 \n"); PrintInorder(t2);
     printf("\n");
 
+    Free(&t1);
+    Free(&t2);
+
     return 0;
 }
