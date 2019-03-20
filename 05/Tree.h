@@ -14,9 +14,8 @@ typedef struct Link {
 
 
 void Init(TreeNode ** t, Item x) {
-   TreeNode * lpT = (TreeNode *)calloc(1, sizeof(TreeNode));
-   *t = lpT;
-   lpT->elem = x;
+   (*t) = (TreeNode *)calloc(1, sizeof(TreeNode));
+   (*t)->elem = x;
 }
 
 void Insert(TreeNode ** t, Item x) {
