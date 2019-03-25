@@ -7,24 +7,25 @@
 
 #ifndef LIST_H_
 #define LIST_H_
+
 #include <stdlib.h>
 
-typedef struct ListNode{
+typedef struct ListNode {
 	Item elem;
-	struct ListNode* next;
-	struct ListNode* prev;
-}ListNode;
+	struct ListNode * next;
+	struct ListNode * prev;
+} ListNode;
 
 
-typedef struct List{
+typedef struct List {
 	long length;
-	struct ListNode* head;
-}List;
+	struct ListNode * head;
+} List;
 
-List* createList(void){
-	List* newList = (List*) malloc(sizeof(List));
+List * createList(void) {
+	List * newList = (List *) malloc(sizeof(List));
 
-	newList->head = (ListNode*)malloc(sizeof(ListNode));
+	newList->head = (ListNode *) malloc(sizeof(ListNode));
 
 	newList->head->next = newList->head;
 	newList->head->prev = newList->head;
@@ -35,12 +36,12 @@ List* createList(void){
 }
 
 
-void destroyList(List* list){
+void destroyList(List * list) {
 
-	ListNode* it = list->head->next;
+	ListNode * it = list->head->next;
 
-	while(it != list->head){
-		ListNode* deleteNode = it;
+	while (it != list->head) {
+		ListNode * deleteNode = it;
 		it = it->next;
 		free(deleteNode);
 	}
@@ -49,16 +50,16 @@ void destroyList(List* list){
 }
 
 
-int isEmptyList(List* list){
+int isEmptyList(List * list) {
 	return (list->head == list->head->next);
-	 /* Comparatia se face cu santinela, in nici un caz cu NULL */
+	/* Comparatia se face cu santinela, in nici un caz cu NULL */
 }
 
-void listPushFront(List* list, Item elem){
+void listPushFront(List * list, Item elem) {
 
-	if(list == NULL) return;
+	if (list == NULL) return;
 
-	ListNode* newNode = (ListNode*) malloc(sizeof(ListNode));
+	ListNode * newNode = (ListNode *) malloc(sizeof(ListNode));
 	newNode->elem = elem;
 
 	newNode->prev = list->head;
@@ -71,10 +72,10 @@ void listPushFront(List* list, Item elem){
 
 }
 
-void listPopFront(List* list){
-	if(isEmptyList(list)) return;
+void listPopFront(List * list) {
+	if (isEmptyList(list)) return;
 
-	ListNode* deleteNode = list->head->next;
+	ListNode * deleteNode = list->head->next;
 
 	deleteNode->next->prev = list->head;
 	list->head->next = deleteNode->next;
@@ -84,11 +85,11 @@ void listPopFront(List* list){
 	free(deleteNode);
 }
 
-void listPushBack(List* list, Item item){
+void listPushBack(List * list, Item item) {
 
-	if(list == NULL) return;
+	if (list == NULL) return;
 
-	ListNode* newNode = (ListNode*) malloc(sizeof(ListNode));
+	ListNode * newNode = (ListNode *) malloc(sizeof(ListNode));
 	newNode->elem = item;
 
 	newNode->next = list->head;
@@ -100,20 +101,21 @@ void listPushBack(List* list, Item item){
 	list->length++;
 }
 
-void ListPopBack(List* list){
-	if(isEmptyList(list)) return;
-	ListNode* deleteNode = list->head->prev;
+void ListPopBack(List * list) {
+	if (isEmptyList(list)) return;
+	ListNode * deleteNode = list->head->prev;
 	deleteNode->prev->next = list->head;
 	list->head->prev = deleteNode->prev;
 	list->length--;
 	free(deleteNode);
 }
 
-Item listFront(List* list){
+Item listFront(List * list) {
 	return list->head->next->elem;
 }
 
-Item listBack(List* list){
+Item listBack(List * list) {
 	return list->head->prev->elem;
 }
+
 #endif /* LIST_H_ */
