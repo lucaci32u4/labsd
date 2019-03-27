@@ -109,15 +109,15 @@ BSTNode * search(BSTree * tree, Item elem) {
 	return __search(tree->root, elem, tree->nil);
 }
 
-BSTNode * __minimun(BSTNode * cursor, NILDECL) {
+BSTNode * __minimum(BSTNode * cursor, NILDECL) {
 	if (NOTNULL(cursor)) {
 		BSTNode * min = cursor;
 		if (NOTNULL(cursor->l)) {
-			BSTNode * l = __minimun(cursor->l, NIL);
+			BSTNode * l = __minimum(cursor->l, NIL);
 			if (l->elem < min->elem) min = l;
 		}
 		if (NOTNULL(cursor->l)) {
-			BSTNode * r = __minimun(cursor->r, NIL);
+			BSTNode * r = __minimum(cursor->r, NIL);
 			if (r->elem < min->elem) min = r;
 		}
 		return min;
@@ -126,7 +126,7 @@ BSTNode * __minimun(BSTNode * cursor, NILDECL) {
 }
 
 BSTNode * minimum(BSTree * tree, BSTNode * cursor) {
-	return __minimun(cursor, tree->nil);
+	return __minimum(cursor, tree->nil);
 }
 
 BSTNode * __maximum(BSTNode * cursor, NILDECL) {
