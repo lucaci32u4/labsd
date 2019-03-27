@@ -37,7 +37,8 @@ typedef struct BSTree {
 	BSTNode * nil; // The nil sentinel to avoid checks for NULL
 } BSTree;
 
-#define INITNIL(__null__) BSTNode * __local_nil = __null__;
+#define NILDECL BSTNode * __local_nil
+#define INITNIL(__null__) NILDECL = __null__;
 #define NOTNULL(__val__) ((__val__) != (__local_nil))
 #define ISNULL(__val__) ((__val__) == (__local_nil))
 #define NIL (__local_nil)
@@ -67,7 +68,7 @@ int isEmpty(BSTree * tree) {
 	return ISNULL(tree->root->l);
 }
 
-boolean __insert(BSTNode * cursor, Item item, BSTNode * __local_nil) {
+boolean __insert(BSTNode * cursor, Item item, NILDECL) {
 	BSTNode ** placement = NULL;
 	while (!placement) {
 		if (item < cursor->elem) {
@@ -100,7 +101,7 @@ void insert(BSTree * tree, Item elem) {
 	tree->size += __insert(tree->root, elem, tree->nil);
 }
 
-BSTNode * __search(BSTNode * cursor, Item elem, BSTNode * __local_nil) {
+BSTNode * __search(BSTNode * cursor, Item elem, NILDECL) {
 	return (NOTNULL(cursor) ? (cursor->elem == elem ? cursor : (elem <cursor->elem ? __search(cursor->l, elem, NIL) : __search(cursor->r, elem, NIL))) : NULL);
 }
 
@@ -108,7 +109,7 @@ BSTNode * search(BSTree * tree, Item elem) {
 	return __search(tree->root, elem, tree->nil);
 }
 
-BSTNode * __minimun(BSTNode * cursor, BSTNode * __local_nil) {
+BSTNode * __minimun(BSTNode * cursor, NILDECL) {
 	if (NOTNULL(cursor)) {
 		BSTNode * min = cursor;
 		if (NOTNULL(cursor->l)) {
@@ -128,7 +129,7 @@ BSTNode * minimum(BSTree * tree, BSTNode * cursor) {
 	return __minimun(cursor, tree->nil);
 }
 
-BSTNode * __maximum(BSTNode * cursor, BSTNode * __local_nil) {
+BSTNode * __maximum(BSTNode * cursor, NILDECL) {
 	if (NOTNULL(cursor)) {
 		BSTNode * max = cursor;
 		if (NOTNULL(cursor->l)) {
@@ -148,7 +149,7 @@ BSTNode * maximum(BSTree * tree, BSTNode * cursor) {
 	return __maximum(cursor, tree->nil);
 }
 
-void __destroyTree(BSTNode * cursor, BSTNode * __local_nil) {
+void __destroyTree(BSTNode * cursor,  NILDECL) {
 	if (NOTNULL(cursor)) {
 		__destroyTree(cursor->l, NIL);
 		__destroyTree(cursor->r, NIL);
