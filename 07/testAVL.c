@@ -32,10 +32,6 @@ Item allocElem(long elem){
 	return heapElem;
 }
 
-void destroyElem(Item elem){
-	free(elem);
-}
-
 
 int abs(int value){
 	return (value >= 0)?value:-value;
