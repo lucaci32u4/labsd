@@ -66,7 +66,7 @@ void avlRightRotate(AVLTree * tree, AVLNode * y) {
 
 	/* move beta */
 	y->l = x->r;
-	if (x->r != tree->nil) x->r->p = y; // move beta
+	if (x->r != tree->nil) x->r->p = y;
 
 	/* swap main nodes */
 	x->r = y;
