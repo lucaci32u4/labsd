@@ -69,12 +69,15 @@ void siftDown(APriQueue h, int index) {
 	while (1) {
 		int lastIndex = index;
 		/* go down */
-		if (h->elem[index].prior < h->elem[getLeftChild(index)].prior) {
-			index = getLeftChild(index);
-		}
-		if (getRightChild(lastIndex) < h->size) {
-			if (h->elem[index].prior < h->elem[getRightChild(lastIndex)].prior) {
-				index = getRightChild(lastIndex);
+		if (getLeftChild(index) < h->size) {
+			if (h->elem[index].prior < h->elem[getLeftChild(index)].prior) {
+				index = getLeftChild(index);
+			}
+			if (getRightChild(lastIndex) < h->size) {
+				if (h->elem[index].prior <
+				    h->elem[getRightChild(lastIndex)].prior) {
+					index = getRightChild(lastIndex);
+				}
 			}
 		}
 
