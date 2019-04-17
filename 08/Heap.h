@@ -44,7 +44,7 @@ void siftUp(APriQueue h, int index) {
 	while (index) {
 		ItemType parent = h->elem[getParent(index)];
 		if (parent.prior < h->elem[index].prior) {
-			/* swap elems */
+			/* swap nodes */
 			h->elem[getParent(index)] = h->elem[index];
 			h->elem[index] = parent;
 			index = getParent(index);
@@ -62,37 +62,35 @@ void insert(PriQueue * h, ItemType x) {
 
 	/* add element */
 	h->elem[h->size - 1] = x;
-	siftUp(h, h->size - 1);
+	siftUp(h, (int)(h->size - 1));
 }
 
 void siftDown(APriQueue h, int index) {
 	while (1) {
 		int lastIndex = index;
-		if (getLeftChild(index) < h->size) {
-			if (h->elem[index].prior < h->elem[getLeftChild(index)].prior) {
-				index = getLeftChild(index);
-			}
-			if (getRightChild(lastIndex) < h->size) {
-				if (h->elem[index].prior < h->elem[getRightChild(lastIndex)].prior) {
-					index = getRightChild(lastIndex);
-				}
+		/* go down */
+		if (h->elem[index].prior < h->elem[getLeftChild(index)].prior) {
+			index = getLeftChild(index);
+		}
+		if (getRightChild(lastIndex) < h->size) {
+			if (h->elem[index].prior < h->elem[getRightChild(lastIndex)].prior) {
+				index = getRightChild(lastIndex);
 			}
 		}
+
 		if (lastIndex != index) {
-			/* swap */
-			ItemType aux = h->elem[lastIndex];
-			h->elem[lastIndex] = h->elem[index];
-			h->elem[index] = aux;
-		} else {
-			break;
-		}
+			/* swap nodes */
+			ItemType aux = h->elem[index];
+			h->elem[index] = h->elem[lastIndex];
+			h->elem[lastIndex] = aux;
+		} else break;
 	}
 }
 
 void removeMax(APriQueue h) {
-	if (h->size > 0) {
-		h->elem[0] = h->elem[h->size - 1];
+	if (h->size) {
 		h->size--;
+		h->elem[0] = h->elem[h->size];
 		siftDown(h, 0);
 	}
 }
