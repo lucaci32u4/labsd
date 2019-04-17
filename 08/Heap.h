@@ -20,7 +20,7 @@ typedef struct heap {
 PriQueue * makeQueue(int maxHeapSize) {
 	PriQueue * queue = (PriQueue *)calloc(1, sizeof(PriQueue));
 	queue->maxHeapSize = maxHeapSize;
-	queue->elem = (ItemType *)calloc(queue->maxHeapSize, sizeof(ItemType));
+	queue->elem = (ItemType *)calloc((size_t)(queue->maxHeapSize), sizeof(ItemType));
 	return queue;
 }
 
