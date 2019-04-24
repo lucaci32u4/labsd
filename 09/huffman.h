@@ -14,7 +14,7 @@ typedef struct {
 #include "heap.h"
 
 void computeFreqs(char * text, int size, int freqs[256]) {
-	memset(freqs, 0, 256 * sizeof(char));
+	memset(freqs, 0, 256 * sizeof(int));
 	while (size) {
 		freqs[*text]++;
 		text++;
@@ -45,6 +45,7 @@ HuffmanNode * makeTree(int freqs[256], int * size) {
 		int indexR = removeMin(heap).content;
 		leafs[leafCount].left = indexL;
 		leafs[leafCount].right = indexR;
+		leafs[leafCount].value = 0;
 		ItemType t = { leafCount++, freqL + freqR };
 		insert(heap, t);
 	}
@@ -53,46 +54,65 @@ HuffmanNode * makeTree(int freqs[256], int * size) {
 }
 
 void makeCodes(int index, HuffmanNode * nodes, char ** codes, char * code) {
-	if (nodes[index].left == -1 && nodes[index].right == -1) {
-		strcpy(codes[nodes[index].value], code);
+	if (nodes[index].value == 0) {
+		strcat(code, "0");
+		makeCodes(nodes[index].left, nodes, codes, code);
+		code[strlen(code) - 1] = 0;
+		strcat(code, "1");
+		makeCodes(nodes[index].right, nodes, codes, code);
+		code[strlen(code) - 1] = 0;
 	} else {
-		if (nodes[index].left != -1) {
-			strcat(code, "0");
-			makeCodes(nodes[index].left, nodes, codes, code);
-			code[strlen(code) - 1] = 0;
-		}
-		if (nodes[index].right != -1) {
-			strcat(code, "1");
-			makeCodes(nodes[index].right, nodes, codes, code);
-			code[strlen(code) - 1] = 0;
-		}
+		codes[nodes[index].value] = (char *)calloc(strlen(code) + 1, sizeof(char));
+		strcpy(codes[nodes[index].value], code);
 	}
 }
 
 char * compress(char * text, int textSize, HuffmanNode * nodes, int numNodes) {
-	char codes[256][10] = { 0 };
+	char * codes[256] = { 0 };
 	char code[10] = { 0 };
 	char * out = (char *)calloc(numNodes * 10, sizeof(char));
-	makeCodes(numNodes - 1, nodes, (char **)codes, code);
-	for (int i = 0; i < textSize; ++i) {
-		strcat(out, codes[text[i]]);
+	if (numNodes > 1) {
+		makeCodes(numNodes - 1, nodes, codes, code);
+		for (int i = 0; i < textSize; ++i) {
+			strcat(out, codes[text[i]]);
+		}
+	} else {
+		memset(out, '0', textSize * sizeof(char));
+		if (textSize == 0) out[0] = 'x';
 	}
 	return out;
 }
 
 char getChar(char ** begin, HuffmanNode * nodes, int index) {
-	if (**begin == '0') {
-		(*begin)++;
-		return getChar(begin, nodes, nodes[index].left);
-	}
-	if (**begin == '1') {
-		(*begin)++;
-		return getChar(begin, nodes, nodes[index].right);
-	}
+	if (nodes[index].right != -1 || nodes[index].left != -1) {
+		if (**begin == '0') {
+			(*begin)++;
+			return getChar(begin, nodes, nodes[index].left);
+		}
+		if (**begin == '1') {
+			(*begin)++;
+			return getChar(begin, nodes, nodes[index].right);
+		}
+	} else return nodes[index].value;
 }
 
 char * decompress(char *text, int textSize, HuffmanNode * nodes, int numNodes) {
-
+	char * string = (char *)calloc(textSize, sizeof(char));
+	if (numNodes > 1) {
+		while (*text) {
+			char app[2] = { getChar(&text, nodes, numNodes - 1), 0 };
+			strcat(string, app);
+		}
+	} else {
+		if (text[0] != 'x') {
+			while (*text) {
+				char app[2] = {nodes->value, 0};
+				strcat(string, app);
+				text++;
+			}
+		}
+	}
+	return string;
 }
 
 #endif
