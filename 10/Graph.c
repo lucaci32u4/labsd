@@ -72,15 +72,15 @@ List* bfs(TGraphL* graph, int s){
 	boolean * visited = (boolean *)calloc(graph->nn, sizeof(boolean));
 	Queue * queue = createQueue();
 	List * path = createList();
-	enqueue(path, s);
 	for (enqueue(queue, s); !isQueueEmpty(queue); ) {
 		int index = front(queue);
 		dequeue(queue);
+		enqueue(path, index);
+		visited[index] = true;
 		for (TNode * cursor = graph->adl[index]; cursor; cursor = cursor->next) {
 			if (!visited[cursor->v]) {
-				visited[index] = true;
+				visited[cursor->v] = true;
 				enqueue(queue, cursor->v);
-				enqueue(path, cursor->v);
 			}
 		}
 	}

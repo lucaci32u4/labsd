@@ -118,10 +118,10 @@ int testBFS(TGraphL** gl, float score){
 	ASSERT(!isListEmpty(path),"BFSGL-01");
 	ASSERT(path->head->next->key == 2,"BFSGL-02");
 	ASSERT(path->head->prev->key == 0,"BFSGL-03");
-	ASSERT(path->head->next->next->key == 5,"DFSRecGL-04");
-	ASSERT(path->head->prev->prev->key == 4,"DFSRecGL-05");
-	ASSERT(path->head->next->next->next->key == 3,"DFSRecGL-06");
-	ASSERT(path->head->prev->prev->prev->key == 1,"DFSRecGL-07");
+	ASSERT(path->head->next->next->key == 5,"BFSGL-04");
+	ASSERT(path->head->prev->prev->key == 4,"BFSGL-05");
+	ASSERT(path->head->next->next->next->key == 3,"BFSGL-06");
+	ASSERT(path->head->prev->prev->prev->key == 1,"BFSGL-07");
 	passed3("BFS Adj List",score);
 	printPath(path);
 	destroyList(path);
