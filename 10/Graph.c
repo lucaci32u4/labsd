@@ -1,38 +1,105 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include <stdbool.h>
 #include "Util.h"
 #include "Graph.h"
 
+typedef bool boolean;
+
 TGraphL* createGraphAdjList(int numberOfNodes) {
-	//TODO: 1
-	return NULL;
+	TGraphL * graph = (TGraphL *)calloc(1, sizeof(TGraphL));
+	graph->nn = numberOfNodes;
+	graph->adl = (ATNode *)calloc(numberOfNodes, sizeof(ATNode));
+	return graph;
 }
 
 void addEdgeList(TGraphL* graph, int v1, int v2) {
-	//TODO: 1
+	TNode * one = (TNode *)calloc(1, sizeof(TNode));
+	TNode * two = (TNode *)calloc(1, sizeof(TNode));
+	one->v = v2;
+	two->v = v1;
+	one->c = 1; two->c = 1;
+	for (int i = 0; i < graph->nn; ++i) {
+		if (i == v1) {
+			one->next = graph->adl[i];
+			graph->adl[i] = one;
+		}
+		if (i == v2) {
+			two->next = graph->adl[i];
+			graph->adl[i] = two;
+		}
+	}
 }
 
 List* dfsIterative(TGraphL* graph, int s) {
-
-	//TODO: 2
+	Stack * stack = createStack();
+	List * path = createList();
+	boolean * visited = (boolean *)calloc(graph->nn, sizeof(boolean));
+	for (push(stack, s); !isStackEmpty(stack); ) {
+		int index = top(stack);
+		pop(stack);
+		for (TNode * cursor = graph->adl[index]; cursor; cursor = cursor->next) {
+			if (!visited[cursor->v]) push(stack, cursor->v);
+		}
+		enqueue(path, index);
+		visited[index] = true;
+	}
+	destroyStack(stack);
+	free(visited);
+	return path;
 }
 
-void dfsRecHelper(TGraphL* graph, int* visited, List* path, int s) {
-	//TODO: 3
+void dfsRecHelper(TGraphL* graph, boolean * visited, List* path, int s) {
+	if (!visited[s]) {
+		visited[s] = true;
+		enqueue(path, s);
+		for (TNode * cursor = graph->adl[s]; cursor; cursor = cursor->next) {
+			dfsRecHelper(graph, visited, path, cursor->v);
+		}
+	}
 }
 
 List* dfsRecursive(TGraphL* graph, int s) {
-	// TODO 3
+	List * path = createList();
+	boolean * visited = (boolean *)calloc(graph->nn, sizeof(boolean));
+	dfsRecHelper(graph, visited, path, s);
+	free(visited);
+	return path;
 }
 
 List* bfs(TGraphL* graph, int s){
-	// TODO: 4
+	boolean * visited = (boolean *)calloc(graph->nn, sizeof(boolean));
+	Queue * queue = createQueue();
+	List * path = createList();
+	enqueue(path, s);
+	for (enqueue(queue, s); !isQueueEmpty(queue); ) {
+		int index = front(queue);
+		dequeue(queue);
+		for (TNode * cursor = graph->adl[index]; cursor; cursor = cursor->next) {
+			if (!visited[cursor->v]) {
+				visited[index] = true;
+				enqueue(queue, cursor->v);
+				enqueue(path, cursor->v);
+			}
+		}
+	}
+	destroyQueue(queue);
+	free(visited);
+	return path;
 }
 
 
 void destroyGraphAdjList(TGraphL* graph){
-	// TODO: 5
+	for (int i = 0; i < graph->nn; ++i) {
+		for (TNode * cursor = graph->adl[i]; cursor; ) {
+			TNode * next = cursor->next;
+			free(cursor);
+			cursor = next;
+		}
+	}
+	free(graph->adl);
+	free(graph);
 }
 
 void removeEdgeList(TGraphL* graph, int v1, int v2){
