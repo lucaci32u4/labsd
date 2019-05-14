@@ -3,7 +3,7 @@
 #include <limits.h>
 #include "heap.h"
 
-#define INF INT_MAX
+#define INF INT_MAX / 4
 
 typedef int TCost;
 
@@ -57,7 +57,7 @@ void insert_edge_list(TGraphL * G, int v1, int v2, int c) {
 	G->adl[v2] = t;
 }
 
-
+/*
 void dijkstra(TGraphL g, int s) {
 	MinHeap * heap = newQueue(g.nn);
 	for (int i = 0; i < g.nn; ++i) {
@@ -66,21 +66,84 @@ void dijkstra(TGraphL g, int s) {
 	while (!isEmpty(heap)) {
 		MinHeapNode * u = removeMin(heap);
 		int index = u->v;
+		//printf("%d | %d\n", u->v, u->prior);
 		for (struct node * cursor = g.adl[index]; cursor; cursor = cursor->next) {
 			int l = isInMinHeap(heap, cursor->v);
 			if (l != -1) {
-				if (heap->elem[l]->prior > cursor->c + u->prior && u->prior != INF) {
+				if (heap->elem[l]->prior > cursor->c + u->prior) {
 					heap->elem[l]->prior = cursor->c + u->prior;
-					printf("%d | %d\n", l, heap->elem[l]->prior);
+					printf("%d | %d\n", heap->elem[l]->v, heap->elem[l]->prior);
+					SiftUp(heap, l);
 				}
 			}
 		}
 		free(u);
 	}
+}*/
+
+void dijkstra(TGraphL g, int s) {
+	int * dist = (int *)calloc(g.nn, sizeof(int));
+	int * marked = (int *)calloc(g.nn, sizeof(int));
+	int markCounter = 0;
+	for (int i = 0; i < g.nn; ++i) {
+		dist[i] = (i == s ? 0 : INF);
+	}
+	while (markCounter != g.nn) {
+		int index = -1;
+		for (int i = 0; i < g.nn; ++i) {
+			if (!marked[i]) {
+				if (index == -1) index = i;
+				else if (dist[index] > dist[i]) index = i;
+			}
+		}
+		printf("%d | %d\n", index, dist[index]);
+		marked[index] = 1;
+		markCounter++;
+		for (struct node * cursor = g.adl[index]; cursor; cursor = cursor->next) {
+			if (!marked[cursor->v]) {
+				if (dist[cursor->v] > cursor->c + dist[index]) {
+					dist[cursor->v] = cursor->c + dist[index];
+				}
+			}
+		}
+	}
+	free(dist);
+	free(marked);
 }
 
-void Prim(TGraphL G) {
-
+void Prim(TGraphL g) {
+	int * tree = (int *)calloc(g.nn, sizeof(int));
+	int * dist = (int *)calloc(g.nn, sizeof(int));
+	int * marked = (int *)calloc(g.nn, sizeof(int));
+	for (int i = 0; i < g.nn; ++i) {
+		dist[i] = INF;
+	}
+	dist[0] = 0; tree[0] = -1;
+	for (int count = 0; count < g.nn - 1; ++count) {
+		int index = -1;
+		for (int i = 0; i < g.nn; ++i) {
+			if (!marked[i]) {
+				if (index == -1) index = i;
+				else if (dist[index] > dist[i]) index = i;
+			}
+		}
+		marked[index] = 1;
+		for (int v = 0; v < g.nn; ++v) {
+			int uvd = 0;
+			for (struct node * cursor = g.adl[index]; cursor; cursor = cursor->next) {
+				if (cursor->v == v) {
+					uvd = cursor->c;
+				}
+			}
+			if (uvd && !marked[v] && uvd < dist[v]) {
+				tree[v] = index;
+				dist[v] = uvd;
+			}
+		}
+	}
+	for (int i = 1; i < g.nn; ++i) {
+		printf("%d ~ %d\n", tree[i], i);
+	}
 }
 
 
