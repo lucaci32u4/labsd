@@ -63,7 +63,7 @@ void insert(APriQueue h, ItemType x) {
     siftUp(h, h->size - 1);
 }
 
-ItemType getMinAPriQueue h) {
+ItemType getMinAPriQueue (APriQueue h) {
     return h->elem[0];
 }
 
