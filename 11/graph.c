@@ -41,6 +41,7 @@ void free_list(TGraphL * G) {
 		G->adl[i] = NULL;
 	}
 	G->nn = 0;
+	free(G->adl);
 }
 
 void insert_edge_list(TGraphL * G, int v1, int v2, int c) {
@@ -144,6 +145,9 @@ void Prim(TGraphL g) {
 	for (int i = 1; i < g.nn; ++i) {
 		printf("%d ~ %d\n", tree[i], i);
 	}
+	free(tree);
+	free(dist);
+	free(marked);
 }
 
 
@@ -170,8 +174,8 @@ int main() {
 	printf("\n");
 	dijkstra(G, 0);
 	printf("\n");
-
 	Prim(G);
-
+	free_list(&G);
+	fclose(stdin);
 	return 0;
 }
